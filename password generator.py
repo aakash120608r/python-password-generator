@@ -7,16 +7,17 @@ def password_gen(n):
     digit = random.choice(string.digits)
     punct = random.choice(string.punctuation)
 
-    remaining=''
+    password_list = [lower, upper, digit, punct]
+    
     for i in range(n-4):
-        remaining += random.choice(string.ascii_letters + string.digits + string.punctuation)
-
-    password_list = list(lower + upper + digit + punct + remaining)
+        password_list.append(random.choice(string.ascii_letters + string.digits + string.punctuation))
+        
     random.shuffle(password_list)
     password=''.join(password_list)
 
     return password
 
+print(("=== Password Generator ===")
 while True:
     n=int(input('Entert the length of the password: '))
     if n < 4:
