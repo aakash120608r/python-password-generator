@@ -17,7 +17,7 @@ def password_gen(n):
 
     return password
 
-print(("=== Password Generator ===")
+print("=== Password Generator ===")
 while True:
     n=int(input('Entert the length of the password: '))
     if n < 4:
