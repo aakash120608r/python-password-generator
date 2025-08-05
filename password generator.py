@@ -19,7 +19,7 @@ def password_gen(n):
 
 print("=== Password Generator ===")
 while True:
-    n=int(input('Entert the length of the password: '))
+    n=int(input('Enter8 the length of the password: '))
     if n < 4:
         print("Password length must be at least 4")
         continue
@@ -33,6 +33,7 @@ while True:
     print('Not satisfied with your password, Generate again then!')
     a=input('Do you want to generate again (y/n): ')
     if a=='y'or a=='yes' or a=='Yes':
+        print()
         continue
     elif a=='n' or a=='no' or a=='No':
         print('Thank You')
