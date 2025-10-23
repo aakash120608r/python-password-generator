@@ -57,6 +57,15 @@ def get_strength(n, include_symbols):
     else:
         return "Very Strong 💪", "Excellent for banking/email"
 
+def calculate_combinations(n, include_symbols):
+    """Calculate possible combinations"""
+    charset_size = 26 + 26 + 10  # lower + upper + digits
+    if include_symbols:
+        charset_size += 32  # punctuation
+    
+    combinations = charset_size ** n
+    return combinations
+
 
 print("=== Password Generator ===")
 while True:
