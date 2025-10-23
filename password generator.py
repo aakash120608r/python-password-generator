@@ -77,41 +77,98 @@ def save_passwords(passwords):
             f.write(f"{i}. {pwd}\n")
     print(f"✅ Passwords saved to {filename}")
 
-print("=== Password Generator ===")
-while True:
-    n=int(input('Enter the length of the password: '))
+def display_password_info(password, n, include_symbols):
+    """Display detailed password information"""
+    print('━' * 50)
+    print(f'Your password is: {password}')
+    print('━' * 50)
+    print(f'Length: {n} characters')
     
-    easy=input('Do you want easy to read password (y/n): ')
-    if easy == 'y' or easy == 'yes' or easy == 'Yes':
-        easy_to_read = True
-    elif easy == 'n' or easy == 'no' or easy == 'No':
-        easy_to_read = False
-    else:
-        print('Invalid Input')
-        continue
-
-    include=input('Do you want to include symbols (y/n): ')
-    if include=='y' or include=='yes' or include=='Yes':
-        include_symbols = True
-    elif include=='n' or include=='no' or include=='No':
-        include_symbols = False
-    else:
-        print('Invalid Input')
-        continue
-
-    print('Your password is: ',password_gen(n, include_symbols = include_symbols, easy_to_read = easy_to_read))
+    strength, advice = get_strength(n, include_symbols)
+    print(f'Strength: {strength}')
+    print(f'Advice: {advice}')
     
-    print(str(get_strength(n, include_symbols)))
-    print()
+    combos = calculate_combinations(n, include_symbols)
+    print(f'Possible combinations: {combos:,}')
+    
+    # Count character types
+    has_lower = sum(1 for c in password if c.islower())
+    has_upper = sum(1 for c in password if c.isupper())
+    has_digit = sum(1 for c in password if c.isdigit())
+    has_symbol = sum(1 for c in password if c in string.punctuation)
+    
+    print(f'Contains: {has_lower} lowercase, {has_upper} uppercase, {has_digit} digits, {has_symbol} symbols')
+    print('━' * 50)
 
-    print('Not satisfied with your password, Generate again then!')
-    a = input('Do you want to generate again (y/n): ')
-    if a == 'y'or a == 'yes' or a == 'Yes':
-        print()
-        continue
-    elif a == 'n' or a == 'no' or a == 'No':
-        print('Thank You')
-        break
+def check_password_strength():
+    pwd = input("Enter the password to check: ")
+    n = len(pwd)
+    include_symbols = any(c in string.punctuation for c in pwd)
+    
+    display_password_info(pwd, n, include_symbols)
+
+def main():
+    print("Welcome to the Password Generator!")
+    print("1. Generate a single password")
+    print("2. Generate multiple passwords")
+    print("3. Password strength checker")
+    print("4. Exit")
+    choice = input("Select an option (1-5): ")
+
+    if choice == '1':    
+        try:
+            n = int(input("Enter password length: "))
+        except ValueError:
+            print("Invalid input. Please enter a number.")
+            return
+
+        include_symbols = input("Include symbols? (y/n): ")
+        easy_to_read = input("Make password easy to read? (y/n): ")
+        
+        password = password_gen(n, include_symbols, easy_to_read)
+        
+        if password.startswith("Error"):
+            print(password)
+            return
+        
+        display_password_info(password, n, include_symbols)
+        
+        save_option = input("Do you want to save the password? (y/n): ").lower()
+        if save_option == 'y':
+            save_passwords([password])
+
+    elif choice == '2':
+        try:
+            count = int(input("How many passwords to generate? "))
+            n = int(input("Enter password length: "))
+        except ValueError:
+            print("Invalid input. Please enter numbers.")
+            return
+
+        include_symbols = input("Include symbols? (y/n): ").lower() == 'y'
+        easy_to_read = input("Make passwords easy to read? (y/n): ").lower() == 'y'
+        
+        passwords = []
+        for i in range(count):
+            pwd = password_gen(n, include_symbols, easy_to_read)
+            if pwd.startswith("Error"):
+                print(pwd)
+                return
+            passwords.append(pwd)
+            display_password_info(pwd, n, include_symbols)
+        
+        save_option = input("Do you want to save the passwords? (y/n): ").lower()
+        if save_option == 'y':
+            save_passwords(passwords)
+
+    elif choice == '3':
+        check_password_strength()
+
+    elif choice == '4':
+        print("Exiting the program. Goodbye!")
+        return
     else:
-        print('Invalid Input')
-        continue
+        print("Invalid choice. Please select a valid option.")
+
+if __name__ == "__main__":
+    main()
