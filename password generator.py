@@ -1,5 +1,6 @@
 import random
 import string
+import time
 
 def password_gen(n, include_symbols=True, easy_to_read=False):
     # Define character sets
@@ -66,6 +67,15 @@ def calculate_combinations(n, include_symbols):
     combinations = charset_size ** n
     return combinations
 
+def save_passwords(passwords):
+    """Save passwords to a file"""
+    filename = f"passwords_{int(time.time())}.txt"
+    with open(filename, 'w') as f:
+        f.write("=== Generated Passwords ===\n")
+        f.write(f"Generated on: {time.ctime()}\n\n")
+        for i, pwd in enumerate(passwords, 1):
+            f.write(f"{i}. {pwd}\n")
+    print(f"✅ Passwords saved to {filename}")
 
 print("=== Password Generator ===")
 while True:
